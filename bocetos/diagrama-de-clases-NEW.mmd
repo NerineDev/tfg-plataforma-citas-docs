@@ -72,22 +72,22 @@ erDiagram
         string country_code
     }
 
-    USERS ||--o| PRO_PROFILES : has
-    USERS ||--o{ BILLING_DETAILS : has
-    USERS ||--o{ BOOKINGS : makes
+    USERS ||--o| PRO_PROFILES : tiene
+    USERS ||--o{ BILLING_DETAILS : tiene
+    USERS ||--o{ BOOKINGS : realiza
 
-    PRO_PROFILES ||--o{ SERVICES : offers
-    PRO_PROFILES ||--o{ SCHEDULES : defines
-    PRO_PROFILES ||--o{ BOOKINGS : receives
+    PRO_PROFILES ||--o{ SERVICES : ofrece
+    PRO_PROFILES ||--o{ SCHEDULES : define
+    PRO_PROFILES ||--o{ BOOKINGS : recibe
 
-    SERVICES ||--o{ BOOKINGS : booked_in
+    SERVICES ||--o{ BOOKINGS : se_reserva_en
 
-    BOOKINGS ||--o{ PAYMENTS : has
-    BOOKINGS ||--o{ INVOICES : has
+    BOOKINGS ||--o{ PAYMENTS : tiene
+    BOOKINGS ||--o{ INVOICES : tiene
 
-    PAYMENTS }o--o| INVOICES : links_to
+    PAYMENTS }o--o| INVOICES : se_vincula_con
 
-    BILLING_DETAILS ||--o{ INVOICES : used_in
+    BILLING_DETAILS ||--o{ INVOICES : se_usa_en
 
-    INVOICES ||--o| INVOICES : reverses
-    INVOICES ||--o| INVOICES : replaces
+    INVOICES ||--o| INVOICES : revierte
+    INVOICES ||--o| INVOICES : reemplaza
