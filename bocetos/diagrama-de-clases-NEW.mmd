@@ -1,0 +1,95 @@
+classDiagram
+    class Usuario {
+        +idUsuario : int
+        +nombre : string
+        +email : string
+        +telefono : string
+        +passwordHash : string
+        +activo : boolean
+    }
+
+    class PerfilProfesional {
+        +idPerfilProfesional : int
+        +nombreMarca : string
+        +descripcionBreve : string
+        +emailContactoPublico : string
+        +telefonoPublico : string
+        +direccionProfesional : string
+        +logo : string
+        +visible : boolean
+        +verificado : boolean
+        +estado : string
+    }
+
+    class Servicio {
+        +idServicio : int
+        +nombre : string
+        +descripcion : string
+        +duracionMinutos : int
+        +modalidad : string
+        +precioBase : decimal
+        +activo : boolean
+    }
+
+    class Disponibilidad {
+        +idDisponibilidad : int
+        +diaSemana : int
+        +horaInicio : time
+        +horaFin : time
+        +duracionSlotMin : int
+        +activo : boolean
+    }
+
+    class Cita {
+        +idCita : int
+        +fechaHoraInicio : datetime
+        +duracionMinutos : int
+        +estado : string
+        +precioTotal : decimal
+        +fechaLimitePago : datetime
+        +notasInternas : string
+        +enlaceZoom : string
+    }
+
+    class Pago {
+        +idPago : int
+        +importe : decimal
+        +metodoPago : string
+        +estado : string
+        +fechaPago : datetime
+        +referenciaPasarela : string
+    }
+
+    class Factura {
+        +idFactura : int
+        +numeroFactura : string
+        +serieFactura : string
+        +importeTotal : decimal
+        +estado : string
+        +fechaEmision : datetime
+        +rutaPdf : string
+    }
+
+    class DatosFacturacion {
+        +idDatosFacturacion : int
+        +nombreLegal : string
+        +nifCif : string
+        +direccionLinea1 : string
+        +ciudad : string
+        +codigoPostal : string
+        +pais : string
+        +esPredeterminado : boolean
+    }
+
+    Usuario "1" --> "0..1" PerfilProfesional : puede_tener
+    Usuario "1" --> "0..*" DatosFacturacion : registra
+    Usuario "1" --> "0..*" Cita : reserva_como_cliente
+
+    PerfilProfesional "1" --> "0..*" Servicio : ofrece
+    PerfilProfesional "1" --> "0..*" Disponibilidad : define
+    PerfilProfesional "1" --> "0..*" Cita : recibe
+
+    Servicio "1" --> "0..*" Cita : corresponde_a
+    Cita "1" --> "0..*" Pago : genera
+    Cita "1" --> "0..1" Factura : puede_generar
+    DatosFacturacion "1" --> "0..*" Factura : se_usa_en
