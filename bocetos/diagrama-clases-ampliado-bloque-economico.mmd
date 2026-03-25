@@ -1,0 +1,58 @@
+classDiagram
+    class Reserva {
+        +idReserva: int
+        +inicio: datetime
+        +fin: datetime
+        +precioTotal: decimal
+        +estado: string
+        +paymentDeadline: datetime
+        +notas: string
+        +confirmar()
+        +modificar()
+        +cancelar()
+    }
+
+    class Pago {
+        +idPago: int
+        +importe: decimal
+        +metodo: string
+        +estado: string
+        +fechaPago: datetime
+        +referenciaTransaccion: string
+        +numeroRecibo: string
+        +registrarPago()
+        +marcarFallido()
+        +marcarReembolsado()
+    }
+
+    class Factura {
+        +idFactura: int
+        +numeroFactura: string
+        +tipoFactura: string
+        +subtotal: decimal
+        +impuestos: decimal
+        +total: decimal
+        +estado: string
+        +esReversion: boolean
+        +motivoCorreccion: string
+        +fechaEmision: datetime
+        +generar()
+        +revertir()
+        +sustituir()
+    }
+
+    class DatosFacturacion {
+        +idDatosFacturacion: int
+        +razonSocial: string
+        +nifCif: string
+        +direccion: string
+        +ciudad: string
+        +pais: string
+        +esPredeterminado: boolean
+    }
+
+    Reserva "1" --> "0..*" Pago : genera
+    Reserva "1" --> "0..*" Factura : origina
+    Pago "0..*" --> "0..1" Factura : se vincula con
+    DatosFacturacion "1" --> "0..*" Factura : se usa en
+    Factura "0..1" --> "0..*" Factura : corrige
