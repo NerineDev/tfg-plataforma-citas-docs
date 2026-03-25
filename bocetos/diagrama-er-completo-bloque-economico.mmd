@@ -1,0 +1,99 @@
+erDiagram
+    USERS {
+        int user_id PK
+        string username
+        string email
+        boolean active
+    }
+
+    BILLING_DETAILS {
+        int billing_detail_id PK
+        int user_id FK
+        string legal_name
+        string tax_id
+        string city
+        string country_code
+        boolean is_default
+    }
+
+    BOOKINGS {
+        int booking_id PK
+        int client_user_id FK
+        int pro_profile_id FK
+        int service_id FK
+        datetime booking_start
+        datetime booking_end
+        decimal price_total
+        string status
+        datetime payment_deadline
+    }
+
+    PAYMENTS {
+        int payment_id PK
+        int booking_id FK
+        int invoice_id FK
+        decimal amount
+        string payment_method
+        string status
+        string receipt_number
+    }
+
+    INVOICES {
+        int invoice_id PK
+        int booking_id FK
+        int billing_detail_id FK
+        string invoice_number
+        string invoice_type
+        decimal total_amount
+        string status
+        boolean is_reversal
+        int reverses_invoice_id FK
+        int replaces_invoice_id FK
+    }
+
+    PRO_PROFILES {
+        int pro_profile_id PK
+        int user_id FK
+        string display_name
+        string status
+    }
+
+    THREADS {
+        int thread_id PK
+        int user_id FK
+        int pro_id FK
+        int booking_id FK
+        string status
+    }
+
+    MESSAGES {
+        int message_id PK
+        int thread_id FK
+        int sender_id FK
+        datetime sent_at
+        boolean active
+    }
+
+    SUPPORT_TICKETS {
+        int ticket_id PK
+        int user_id FK
+        string subject
+        string status
+        boolean active
+    }
+
+    USERS ||--o{ BILLING_DETAILS : registra
+    USERS ||--o{ THREADS : inicia
+    USERS ||--o{ MESSAGES : envia
+    USERS ||--o{ SUPPORT_TICKETS : abre
+
+    PRO_PROFILES ||--o{ THREADS : participa
+
+    BOOKINGS ||--o{ PAYMENTS : genera
+    BOOKINGS ||--o{ INVOICES : origina
+    BOOKINGS ||--o{ THREADS : puede_relacionar
+
+    PAYMENTS }o--o| INVOICES : se_vincula_con
+    BILLING_DETAILS ||--o{ INVOICES : se_usa_en
+
+    THREADS ||--o{ MESSAGES : contiene
