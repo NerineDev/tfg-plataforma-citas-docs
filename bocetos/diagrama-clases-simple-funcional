@@ -1,0 +1,48 @@
+classDiagram
+    class Usuario {
+        +username: string
+        +email: string
+        +idiomaPreferido: string
+        +activo: boolean
+    }
+
+    class PerfilProfesional {
+        +nombreVisible: string
+        +estado: string
+        +visible: boolean
+        +verificado: boolean
+    }
+
+    class Servicio {
+        +nombre: string
+        +duracionMin: int
+        +precioBase: decimal
+        +taxRate: decimal
+        +taxExempt: boolean
+        +activo: boolean
+    }
+
+    class Disponibilidad {
+        +diaSemana: int
+        +horaInicio: time
+        +horaFin: time
+        +activa: boolean
+    }
+
+    class Reserva {
+        +inicio: datetime
+        +fin: datetime
+        +precioTotal: decimal
+        +estado: string
+        +paymentDeadline: datetime
+        +confirmar()
+        +modificar()
+        +cancelar()
+    }
+
+    Usuario "1" --> "0..1" PerfilProfesional : puede tener
+    PerfilProfesional "1" --> "0..*" Servicio : ofrece
+    PerfilProfesional "1" --> "0..*" Disponibilidad : define
+    Usuario "1" --> "0..*" Reserva : realiza
+    PerfilProfesional "1" --> "0..*" Reserva : recibe
+    Servicio "1" --> "0..*" Reserva : se reserva en
