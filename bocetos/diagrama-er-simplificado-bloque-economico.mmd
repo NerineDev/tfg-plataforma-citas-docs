@@ -1,0 +1,54 @@
+erDiagram
+    USERS {
+        int user_id PK
+        string username
+        string email
+    }
+
+    BILLING_DETAILS {
+        int billing_detail_id PK
+        int user_id FK
+        string legal_name
+        string tax_id
+        string country_code
+    }
+
+    BOOKINGS {
+        int booking_id PK
+        int client_user_id FK
+        int pro_profile_id FK
+        int service_id FK
+        datetime booking_start
+        datetime booking_end
+        decimal price_total
+        string status
+        datetime payment_deadline
+    }
+
+    PAYMENTS {
+        int payment_id PK
+        int booking_id FK
+        int invoice_id FK
+        decimal amount
+        string payment_method
+        string status
+        string receipt_number
+    }
+
+    INVOICES {
+        int invoice_id PK
+        int booking_id FK
+        int billing_detail_id FK
+        string invoice_type
+        decimal total_amount
+        string status
+    }
+
+    USERS ||--o{ BILLING_DETAILS : registra
+
+    BOOKINGS ||--o{ PAYMENTS : genera
+    BOOKINGS ||--o{ INVOICES : origina
+
+    PAYMENTS }o--o| INVOICES : se_vincula_con
+
+    BILLING_DETAILS ||--o{ INVOICES : se_usa_en
