@@ -1,0 +1,20 @@
+flowchart LR
+    C[Cliente - Navegador web]
+    P[Profesional - Navegador web]
+    A[Administrador - Navegador web]
+
+    B[Backend API<br/>Lógica de negocio y automatismos]
+
+    DB[(Base de datos PostgreSQL)]
+    PAY[Pasarela de pago]
+    MAIL[Servicio de correo]
+    AUTO[Procesos automáticos]
+
+    C --> B
+    P --> B
+    A --> B
+
+    B --> DB
+    B --> PAY
+    B --> MAIL
+    B --> AUTO
