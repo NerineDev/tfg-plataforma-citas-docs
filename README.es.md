@@ -63,3 +63,6 @@ Documentos de trabajo usados para organizar el desarrollo:
 - `decisiones.md` – Decisiones técnicas y de diseño.
 
 Estos archivos son documentos vivos y pueden cambiar a medida que avance el proyecto.
+
+# Licencia
+Este repositorio es propietario y todos los derechos están reservados. El código fuente no puede ser reutilizado, redistribuido, modificado ni utilizado para crear obras derivadas sin autorización previa y por escrito de la autora.
