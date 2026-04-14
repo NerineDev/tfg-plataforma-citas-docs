@@ -2,7 +2,7 @@
 
 Public documentation repository for my **Proyecto Integrado** (Final Project) of the *Desarrollo de Aplicaciones Web (DAW)* cycle.
 
-This repo will store:
+This repo stores:
 
 - The official deliveries for the module (E0, E1, E2, E3).
 - Diagrams and early design sketches.
@@ -44,10 +44,10 @@ This public repo is only for documentation and planning.
 
 Folder with the official deliveries of the Proyecto Integrado module:
 
-- `PI_E0` – Initial project choice and description. *(Already submitted.)*
-- `PI_E1` – Specification and analysis. *(In progress.)*
-- `PI_E2` – Implementation and development. *(Pending.)*
-- `PI_E3` – Deployment, testing and final report. *(Pending.)*
+- `PI_E0` – Initial project choice and description. *(Submitted.)*
+- `PI_E1` – Specification and analysis. *(Submitted.)*
+- `PI_E2` – Implementation and development. *(Submitted.)*
+- `PI_E3` – Deployment, testing and final report. *(Submitted.)*
 
 ### `/bocetos`
 
