@@ -44,10 +44,10 @@ Este repositorio público es exclusivamente para documentación y planificación
 
 Carpeta con las entregas oficiales del módulo Proyecto Integrado:
 
-- `PI_E0` – Elección inicial del proyecto. *(Ya entregada.)*
-- `PI_E1` – Especificación y análisis. *(En curso.)*
-- `PI_E2` – Implementación y desarrollo. *(Pendiente.)*
-- `PI_E3` – Despliegue, pruebas y memoria final. *(Pendiente.)*
+- `PI_E0` – Elección inicial del proyecto. *(Entregada.)*
+- `PI_E1` – Especificación y análisis. *(Entregada.)*
+- `PI_E2` – Implementación y desarrollo. *(Entregada.)*
+- `PI_E3` – Despliegue, pruebas y memoria final. *(Entregada.)*
 
 ### `/bocetos`
 
