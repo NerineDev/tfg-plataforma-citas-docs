@@ -1,0 +1,24 @@
+flowchart TB
+    User["Usuario<br/>(Invitado / Cliente / Profesional / Administrador)"]
+
+    subgraph Railway["Railway"]
+        Frontend["Frontend<br/>HTML · CSS · JavaScript · Bootstrap"]
+        Backend["Backend API<br/>FastAPI · Python"]
+        Database[("PostgreSQL<br/>Base de datos Sesvia")]
+    end
+
+    subgraph External["Servicios externos"]
+        Google["Google OAuth<br/>Registro / login"]
+        Stripe["Stripe test<br/>Pago con tarjeta"]
+        Paypal["PayPal sandbox<br/>Pago PayPal"]
+        SMTP["SMTP<br/>Correos transaccionales"]
+    end
+
+    User --> Frontend
+    Frontend -->|"API REST / HTTPS"| Backend
+    Backend -->|"SQL"| Database
+
+    Backend --> Google
+    Backend --> Stripe
+    Backend --> Paypal
+    Backend --> SMTP
