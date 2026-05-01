@@ -1,55 +1,89 @@
 classDiagram
-class Usuario {
-  +idUsuario: int
-  +username: string
-  +email: string
-  +idiomaPreferido: string
-  +activo: boolean
+
+class User {
+  +int user_id
+  +uuid public_uuid
+  +string username
+  +string email
+  +string lang_pref
+  +boolean active
 }
 
-class PerfilProfesional {
-  +idPerfil: int
-  +nombreVisible: string
-  +bio: string
-  +telefonoContacto: string
-  +ubicacion: string
-  +visible: boolean
-  +verificado: boolean
-  +estado: string
+class AuthAccount {
+  +int auth_account_id
+  +string provider
+  +string email_login
+  +string password_hash
+  +boolean active
 }
 
-class Disponibilidad {
-  +idDisponibilidad: int
-  +diaSemana: int
-  +horaInicio: time
-  +horaFin: time
-  +activa: boolean
+class Role {
+  +int role_id
+  +string role_name
+  +boolean active
 }
 
-class Servicio {
-  +idServicio: int
-  +nombre: string
-  +duracionMin: int
-  +precioBase: decimal
-  +activo: boolean
+class UserRole {
+  +int user_id
+  +int role_id
+  +datetime assigned_at
+  +boolean active
 }
 
-class Reserva {
-  +idReserva: int
-  +inicio: datetime
-  +fin: datetime
-  +precioTotal: decimal
-  +estado: string
-  +paymentDeadline: datetime
-  +notas: string
-  +confirmar()
-  +modificar()
-  +cancelar()
+class ProProfile {
+  +int pro_profile_id
+  +string display_name
+  +text bio
+  +string phone_contact
+  +string location_text
+  +boolean visible
+  +boolean verified
+  +string status
 }
 
-Usuario "1" --> "0..*" Reserva : realiza
-Usuario "1" --> "0..1" PerfilProfesional : puede tener
-PerfilProfesional "1" --> "0..*" Disponibilidad : define
-PerfilProfesional "1" --> "0..*" Servicio : ofrece
-PerfilProfesional "1" --> "0..*" Reserva : recibe
-Servicio "1" --> "0..*" Reserva : se reserva en
+class Service {
+  +int service_id
+  +string service_name
+  +text description
+  +int duration_min
+  +decimal base_price
+  +string currency_code
+  +boolean active
+}
+
+class Schedule {
+  +int schedule_id
+  +int weekday
+  +time start_time
+  +time end_time
+  +int slot_duration_min
+  +boolean active
+}
+
+class Booking {
+  +int booking_id
+  +datetime booking_start
+  +datetime booking_end
+  +decimal price_total
+  +string status
+  +confirm()
+  +cancel()
+}
+
+class BookingHistory {
+  +int booking_history_id
+  +string status
+  +text note
+  +datetime changed_at
+}
+
+User "1" --> "0..*" AuthAccount : authenticates_with
+User "1" --> "0..*" UserRole : has
+Role "1" --> "0..*" UserRole : defines
+User "1" --> "0..1" ProProfile : may_have
+ProProfile "1" --> "0..*" Service : offers
+ProProfile "1" --> "0..*" Schedule : defines
+User "1" --> "0..*" Booking : creates_as_client
+ProProfile "1" --> "0..*" Booking : receives
+Service "1" --> "0..*" Booking : selected_in
+Booking "1" --> "0..*" BookingHistory : tracks
