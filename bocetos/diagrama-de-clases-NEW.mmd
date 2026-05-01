@@ -1,106 +1,184 @@
 classDiagram
-class Usuario {
-  +idUsuario: int
-  +username: string
-  +email: string
-  +idiomaPreferido: string
-  +activo: boolean
+
+class User {
+  +int user_id
+  +uuid public_uuid
+  +string username
+  +string first_name
+  +string last_name_1
+  +string last_name_2
+  +string email
+  +string avatar_url
+  +string lang_pref
+  +boolean active
+  +datetime created_at
+  +datetime updated_at
 }
 
-class PerfilProfesional {
-  +idPerfil: int
-  +nombreVisible: string
-  +bio: string
-  +telefonoContacto: string
-  +ubicacion: string
-  +visible: boolean
-  +verificado: boolean
-  +estado: string
+class AuthAccount {
+  +int auth_account_id
+  +int user_id
+  +string provider
+  +string provider_user_id
+  +string email_login
+  +string password_hash
+  +boolean active
 }
 
-class Disponibilidad {
-  +idDisponibilidad: int
-  +diaSemana: int
-  +horaInicio: time
-  +horaFin: time
-  +activa: boolean
+class Role {
+  +int role_id
+  +string role_name
+  +string description
+  +boolean active
 }
 
-class Servicio {
-  +idServicio: int
-  +nombre: string
-  +duracionMin: int
-  +precioBase: decimal
-  +activo: boolean
+class UserRole {
+  +int user_id
+  +int role_id
+  +datetime assigned_at
+  +boolean active
 }
 
-class Reserva {
-  +idReserva: int
-  +inicio: datetime
-  +fin: datetime
-  +precioTotal: decimal
-  +estado: string
-  +paymentDeadline: datetime
-  +notas: string
-  +confirmar()
-  +modificar()
-  +cancelar()
+class ProProfile {
+  +int pro_profile_id
+  +int user_id
+  +string display_name
+  +text bio
+  +string phone_contact
+  +string location_text
+  +boolean visible
+  +boolean verified
+  +string status
 }
 
-class HistorialReserva {
-  +idHistorial: int
-  +estado: string
-  +nota: string
-  +fechaEvento: datetime
+class BillingDetail {
+  +int billing_detail_id
+  +int user_id
+  +string legal_name
+  +string tax_id
+  +string address_line_1
+  +string city
+  +string postal_code
+  +string country_code
+  +boolean is_default
 }
 
-class Pago {
-  +idPago: int
-  +importe: decimal
-  +metodo: string
-  +estado: string
-  +fechaPago: datetime
-  +referenciaTransaccion: string
-  +numeroRecibo: string
-  +registrarPago()
-  +marcarFallido()
-  +marcarReembolsado()
+class Service {
+  +int service_id
+  +int pro_profile_id
+  +string service_name
+  +text description
+  +int duration_min
+  +decimal base_price
+  +string currency_code
+  +boolean active
 }
 
-class DatosFacturacion {
-  +idDatosFacturacion: int
-  +razonSocial: string
-  +nifCif: string
-  +direccion: string
-  +ciudad: string
-  +pais: string
-  +esPredeterminado: boolean
+class Schedule {
+  +int schedule_id
+  +int pro_profile_id
+  +int weekday
+  +time start_time
+  +time end_time
+  +int slot_duration_min
+  +boolean active
 }
 
-class Factura {
-  +idFactura: int
-  +numeroFactura: string
-  +tipoFactura: string
-  +subtotal: decimal
-  +impuestos: decimal
-  +total: decimal
-  +estado: string
-  +esReversion: boolean
-  +motivoCorreccion: string
-  +fechaEmision: datetime
-  +generar()
-  +revertir()
-  +sustituir()
+class Booking {
+  +int booking_id
+  +int client_user_id
+  +int pro_profile_id
+  +int service_id
+  +datetime booking_start
+  +datetime booking_end
+  +decimal price_total
+  +string currency_code
+  +string status
+  +confirm()
+  +cancel()
 }
 
-Usuario "1" --> "0..1" PerfilProfesional : puede tener
-Usuario "1" --> "0..*" Reserva : realiza
-PerfilProfesional "1" --> "0..*" Disponibilidad : define
-PerfilProfesional "1" --> "0..*" Servicio : ofrece
-PerfilProfesional "1" --> "0..*" Reserva : recibe
-Servicio "1" --> "0..*" Reserva : se reserva en
-Reserva "1" --> "0..*" HistorialReserva : registra
-Reserva "1" --> "0..1" Pago : genera
-Pago "1" --> "0..1" Factura : da lugar a
-DatosFacturacion "1" --> "0..*" Factura : se usa en
-Factura "0..1" --> "0..*" Factura : corrige
+class BookingHistory {
+  +int booking_history_id
+  +int booking_id
+  +string status
+  +text note
+  +datetime changed_at
+}
+
+class Invoice {
+  +int invoice_id
+  +int booking_id
+  +int billing_detail_id
+  +string invoice_number
+  +string invoice_type
+  +decimal total_amount
+  +string status
+  +boolean is_reversal
+  +int reverses_invoice_id
+  +int replaces_invoice_id
+  +generate()
+}
+
+class Payment {
+  +int payment_id
+  +int booking_id
+  +int invoice_id
+  +decimal amount
+  +string payment_method
+  +string status
+  +string receipt_number
+  +register()
+  +mark_failed()
+  +mark_refunded()
+}
+
+class Thread {
+  +int thread_id
+  +int user_id
+  +int pro_id
+  +int booking_id
+  +string subject
+  +string status
+}
+
+class Message {
+  +int message_id
+  +int thread_id
+  +int sender_id
+  +text body
+  +datetime sent_at
+  +boolean active
+}
+
+class SupportTicket {
+  +int ticket_id
+  +int user_id
+  +string subject
+  +text description
+  +string status
+  +boolean active
+}
+
+User "1" --> "0..*" AuthAccount : uses
+User "1" --> "0..*" UserRole : has
+Role "1" --> "0..*" UserRole : assigned
+User "1" --> "0..1" ProProfile : may_have
+User "1" --> "0..*" BillingDetail : stores
+ProProfile "1" --> "0..*" Service : offers
+ProProfile "1" --> "0..*" Schedule : defines
+User "1" --> "0..*" Booking : books
+ProProfile "1" --> "0..*" Booking : receives
+Service "1" --> "0..*" Booking : booked_as
+Booking "1" --> "0..*" BookingHistory : records
+Booking "1" --> "0..*" Invoice : generates
+Booking "1" --> "0..*" Payment : paid_by
+Payment "0..1" --> "0..1" Invoice : linked_to
+BillingDetail "1" --> "0..*" Invoice : used_for
+Invoice "0..1" --> "0..*" Invoice : corrects
+User "1" --> "0..*" Thread : starts
+ProProfile "1" --> "0..*" Thread : participates
+Booking "0..1" --> "0..*" Thread : related_to
+Thread "1" --> "0..*" Message : contains
+User "1" --> "0..*" Message : sends
+User "1" --> "0..*" SupportTicket : opens
