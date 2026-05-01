@@ -1,19 +1,25 @@
 erDiagram
+
     USERS {
         int user_id PK
         uuid public_uuid
         string username
         string first_name
         string last_name_1
+        string last_name_2
         string email
+        string avatar_url
         string lang_pref
         boolean active
+        datetime created_at
+        datetime updated_at
     }
 
     AUTH_ACCOUNTS {
         int auth_account_id PK
         int user_id FK
         string provider
+        string provider_user_id
         string email_login
         string password_hash
         boolean active
@@ -22,14 +28,15 @@ erDiagram
     ROLES {
         int role_id PK
         string role_name
+        string description
         boolean active
     }
 
     USER_ROLES {
         int user_id FK
         int role_id FK
-        boolean active
         datetime assigned_at
+        boolean active
     }
 
     PRO_PROFILES {
@@ -48,7 +55,9 @@ erDiagram
         int user_id FK
         string legal_name
         string tax_id
+        string address_line_1
         string city
+        string postal_code
         string country_code
         boolean is_default
     }
@@ -59,8 +68,7 @@ erDiagram
         string service_name
         int duration_min
         decimal base_price
-        decimal tax_rate
-        boolean tax_exempt
+        string currency_code
         boolean active
     }
 
@@ -70,6 +78,7 @@ erDiagram
         int weekday
         time start_time
         time end_time
+        int slot_duration_min
         boolean active
     }
 
@@ -81,25 +90,16 @@ erDiagram
         datetime booking_start
         datetime booking_end
         decimal price_total
+        string currency_code
         string status
-        datetime payment_deadline
     }
 
     BOOKING_HISTORY {
         int booking_history_id PK
         int booking_id FK
         string status
+        string note
         datetime changed_at
-    }
-
-    PAYMENTS {
-        int payment_id PK
-        int booking_id FK
-        int invoice_id FK
-        decimal amount
-        string payment_method
-        string status
-        string receipt_number
     }
 
     INVOICES {
@@ -115,11 +115,22 @@ erDiagram
         int replaces_invoice_id FK
     }
 
+    PAYMENTS {
+        int payment_id PK
+        int booking_id FK
+        int invoice_id FK
+        decimal amount
+        string payment_method
+        string status
+        string receipt_number
+    }
+
     THREADS {
         int thread_id PK
         int user_id FK
         int pro_id FK
         int booking_id FK
+        string subject
         string status
     }
 
@@ -139,29 +150,30 @@ erDiagram
         boolean active
     }
 
-    USERS ||--o{ AUTH_ACCOUNTS : accede_con
-    USERS ||--o{ USER_ROLES : posee
-    ROLES ||--o{ USER_ROLES : asigna
+    USERS ||--o{ AUTH_ACCOUNTS : has
+    USERS ||--o{ USER_ROLES : has
+    ROLES ||--o{ USER_ROLES : assigned_to
+    USERS ||--o| PRO_PROFILES : may_have
+    USERS ||--o{ BILLING_DETAILS : stores
 
-    USERS ||--o| PRO_PROFILES : puede_tener
-    USERS ||--o{ BILLING_DETAILS : registra
-    USERS ||--o{ BOOKINGS : realiza
-    USERS ||--o{ THREADS : inicia
-    USERS ||--o{ MESSAGES : envia
-    USERS ||--o{ SUPPORT_TICKETS : abre
+    PRO_PROFILES ||--o{ SERVICES : offers
+    PRO_PROFILES ||--o{ SCHEDULES : defines
+    USERS ||--o{ BOOKINGS : makes
+    PRO_PROFILES ||--o{ BOOKINGS : receives
+    SERVICES ||--o{ BOOKINGS : booked_as
 
-    PRO_PROFILES ||--o{ SERVICES : ofrece
-    PRO_PROFILES ||--o{ SCHEDULES : define
-    PRO_PROFILES ||--o{ BOOKINGS : recibe
-    PRO_PROFILES ||--o{ THREADS : participa
+    BOOKINGS ||--o{ BOOKING_HISTORY : records
+    BOOKINGS ||--o{ INVOICES : generates
+    BOOKINGS ||--o{ PAYMENTS : paid_by
+    PAYMENTS }o--o| INVOICES : linked_to
+    BILLING_DETAILS ||--o{ INVOICES : used_for
+    INVOICES ||--o{ INVOICES : rectifies
 
-    SERVICES ||--o{ BOOKINGS : se_reserva_en
-    BOOKINGS ||--o{ BOOKING_HISTORY : genera
-    BOOKINGS ||--o{ PAYMENTS : genera
-    BOOKINGS ||--o{ INVOICES : origina
-    BOOKINGS ||--o{ THREADS : puede_relacionar
-
-    PAYMENTS }o--o| INVOICES : se_vincula_con
-    BILLING_DETAILS ||--o{ INVOICES : se_usa_en
+    USERS ||--o{ THREADS : starts
+    PRO_PROFILES ||--o{ THREADS : participates
+    BOOKINGS ||--o{ THREADS : relates_to
+    THREADS ||--o{ MESSAGES : contains
+    USERS ||--o{ MESSAGES : sends
+    USERS ||--o{ SUPPORT_TICKETS : opens
 
     THREADS ||--o{ MESSAGES : contiene
