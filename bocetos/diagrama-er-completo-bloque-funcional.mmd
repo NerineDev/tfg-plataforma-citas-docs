@@ -1,10 +1,9 @@
 erDiagram
+
     USERS {
         int user_id PK
         uuid public_uuid
         string username
-        string first_name
-        string last_name_1
         string email
         string lang_pref
         boolean active
@@ -19,17 +18,6 @@ erDiagram
         boolean active
     }
 
-    PRO_PROFILES {
-        int pro_profile_id PK
-        int user_id FK
-        string display_name
-        string phone_contact
-        string location_text
-        boolean visible
-        boolean verified
-        string status
-    }
-
     ROLES {
         int role_id PK
         string role_name
@@ -39,8 +27,18 @@ erDiagram
     USER_ROLES {
         int user_id FK
         int role_id FK
-        boolean active
         datetime assigned_at
+        boolean active
+    }
+
+    PRO_PROFILES {
+        int pro_profile_id PK
+        int user_id FK
+        string display_name
+        string location_text
+        boolean visible
+        boolean verified
+        string status
     }
 
     SERVICES {
@@ -58,6 +56,7 @@ erDiagram
         int weekday
         time start_time
         time end_time
+        int slot_duration_min
         boolean active
     }
 
@@ -70,25 +69,23 @@ erDiagram
         datetime booking_end
         decimal price_total
         string status
-        datetime payment_deadline
     }
 
     BOOKING_HISTORY {
         int booking_history_id PK
         int booking_id FK
         string status
+        string note
         datetime changed_at
     }
 
-    USERS ||--o{ AUTH_ACCOUNTS : accede_con
-    USERS ||--o| PRO_PROFILES : puede_tener
-    USERS ||--o{ USER_ROLES : posee
-    ROLES ||--o{ USER_ROLES : asigna
-    PRO_PROFILES ||--o{ SERVICES : ofrece
-    PRO_PROFILES ||--o{ SCHEDULES : define
-    USERS ||--o{ BOOKINGS : realiza
-    PRO_PROFILES ||--o{ BOOKINGS : recibe
-    SERVICES ||--o{ BOOKINGS : se_reserva_en
-    BOOKINGS ||--o{ BOOKING_HISTORY : genera
-    SERVICES ||--o{ BOOKINGS : se_reserva_en
-    BOOKINGS ||--o{ BOOKING_HISTORY : genera
+    USERS ||--o{ AUTH_ACCOUNTS : authenticates_with
+    USERS ||--o{ USER_ROLES : has
+    ROLES ||--o{ USER_ROLES : assigned
+    USERS ||--o| PRO_PROFILES : may_have
+    PRO_PROFILES ||--o{ SERVICES : offers
+    PRO_PROFILES ||--o{ SCHEDULES : defines
+    USERS ||--o{ BOOKINGS : makes
+    PRO_PROFILES ||--o{ BOOKINGS : receives
+    SERVICES ||--o{ BOOKINGS : selected_in
+    BOOKINGS ||--o{ BOOKING_HISTORY : tracks
